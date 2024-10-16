@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "isv"
+version = "0.1.0"
+description = "CNV annotation and pathogenicity prediction tool"
+authors = ["Michaela Gaziova <michaela.gaziova@geneton.sk>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12"
+pandas = ">=2.2"
+numpy = "==1.26.4"
+joblib = ">=1.4"
+xgboost = "==2.1.0"
+shap = "==0.45.1"
+annotation = {git = "https://github.com/geneton-ltd/genovisio_annotation.git#0.1.0"}
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^6.0.0"
+
+[tool.poetry.scripts]
+isv-run = "isv.main:main"
+isv-annotate = "isv.annotate:main"
+isv-predict = "isv.predict:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
