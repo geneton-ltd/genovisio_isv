@@ -1,10 +1,10 @@
 import annotation
 
-from isv.predict import ISVAnnotValues, Prediction, predict
+from isv.src import isv_attributes, prediction
 
 
 def test_predict():
-    annot_values = ISVAnnotValues(
+    annot_values = isv_attributes.ISVAnnotValues(
         gencode_genes=80,
         protein_coding=39,
         pseudogenes=3,
@@ -27,8 +27,8 @@ def test_predict():
         regulatory_TATA_box=0,
     )
 
-    result = predict(annot_values, annotation.enums.CNVType.GAIN)
-    assert result == Prediction(
+    result = prediction.predict(annot_values, annotation.enums.CNVType.GAIN)
+    assert result == prediction.Prediction(
         isv_prediction=0.994540274143219,
         isv_score=0.989080548286438,
         isv_classification="Likely Pathogenic",
