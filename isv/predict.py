@@ -5,13 +5,14 @@ import sys
 from dataclasses import asdict, dataclass
 from typing import Any
 
+import annotation
 import joblib
 import pandas as pd
 import shap
 import xgboost as xgb
 
-import annotation
 from isv.src import constants
+
 
 @dataclass
 class ISVAnnotValues:
@@ -61,7 +62,6 @@ def get_shap_scores(shap_values: dict[str, float]) -> dict[str, float]:
         shap_scores[attribute] = shap_values[attribute] * 2 - 1
 
     return shap_scores
-
 
 
 def get_isv_score(prediction: float) -> float:
@@ -149,12 +149,29 @@ def predict(annotated_cnv: ISVAnnotValues, cnv_type: annotation.enums.CNVType) -
         isv_shap_scores=get_shap_scores(shap_values),
     )
 
+
 def get_annotation_attributes(annot: annotation.Annotation) -> ISVAnnotValues:
     gene_type_counts = annot.count_gene_types()
-    all_genes = gene_type_counts["protein_coding"] + gene_type_counts["pseudogenes"] + gene_type_counts["mirna"] + gene_type_counts["lncrna"] + gene_type_counts["rrna"] + gene_type_counts["snrna"]
+    all_genes = (
+        gene_type_counts["protein_coding"]
+        + gene_type_counts["pseudogenes"]
+        + gene_type_counts["mirna"]
+        + gene_type_counts["lncrna"]
+        + gene_type_counts["rrna"]
+        + gene_type_counts["snrna"]
+    )
 
     regulatory_counts = annot.count_regulatory_types()
-    regulatory_sum = regulatory_counts["CTCF_binding_site"] + regulatory_counts["enhancer"] + regulatory_counts["silencer"] + regulatory_counts["transcriptional_cis_regulatory_region"] + regulatory_counts["promoter"] + regulatory_counts["DNase_I_hypersensitive_site"] + regulatory_counts["enhancer_blocking_element"] + regulatory_counts["TATA_box"]
+    regulatory_sum = (
+        regulatory_counts["CTCF_binding_site"]
+        + regulatory_counts["enhancer"]
+        + regulatory_counts["silencer"]
+        + regulatory_counts["transcriptional_cis_regulatory_region"]
+        + regulatory_counts["promoter"]
+        + regulatory_counts["DNase_I_hypersensitive_site"]
+        + regulatory_counts["enhancer_blocking_element"]
+        + regulatory_counts["TATA_box"]
+    )
 
     hi_genes = annot.get_haploinsufficient_gene_names(overlap_type=annotation.enums.OverlapType.all)
     hi_regions = annot.get_haploinsufficient_regions(overlap_type=annotation.enums.OverlapType.all)
@@ -184,6 +201,7 @@ def get_annotation_attributes(annot: annotation.Annotation) -> ISVAnnotValues:
         regulatory_enhancer_blocking_element=regulatory_counts["enhancer_blocking_element"],
         regulatory_TATA_box=regulatory_counts["TATA_box"],
     )
+
 
 def main() -> None:
     import argparse

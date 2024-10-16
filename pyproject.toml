@@ -18,8 +18,6 @@ annotation = {git = "https://github.com/geneton-ltd/genovisio_annotation.git#0.1
 pytest = "^6.0.0"
 
 [tool.poetry.scripts]
-isv-run = "isv.main:main"
-isv-annotate = "isv.annotate:main"
 isv-predict = "isv.predict:main"
 
 [build-system]

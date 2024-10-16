@@ -1,5 +1,7 @@
-from isv.predict import predict, ISVAnnotValues, Prediction
 import annotation
+
+from isv.predict import ISVAnnotValues, Prediction, predict
+
 
 def test_predict():
     annot_values = ISVAnnotValues(
@@ -74,6 +76,4 @@ def test_predict():
             "regulatory_enhancer_blocking_element": -1.0,
             "regulatory_TATA_box": -1.0,
         },
-
     )
-
