@@ -11,7 +11,7 @@ import pandas as pd
 import shap
 import xgboost as xgb
 
-from isv.src import constants, isv_attributes
+from isv.src import constants, core, isv_attributes
 
 
 class ACMGClassification(enum.StrEnum):
@@ -72,9 +72,8 @@ class Prediction:
 
 
 def format_model_path(cnvtype: annotation.enums.CNVType) -> str:
-    models_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "models"))
     models_name = f"isv2_{cnvtype}.json"
-    return os.path.join(models_dir, models_name)
+    return os.path.join(core.MODELS_DIR, models_name)
 
 
 def get_attributes(cnvtype: annotation.enums.CNVType) -> list[str]:
