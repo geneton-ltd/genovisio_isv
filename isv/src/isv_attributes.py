@@ -39,6 +39,7 @@ def get_annotation_attributes(annot: annotation.Annotation) -> ISVAnnotValues:
         + gene_type_counts["lncrna"]
         + gene_type_counts["rrna"]
         + gene_type_counts["snrna"]
+        + gene_type_counts["other"]
     )
 
     regulatory_counts = annot.count_regulatory_types()
@@ -46,11 +47,16 @@ def get_annotation_attributes(annot: annotation.Annotation) -> ISVAnnotValues:
         regulatory_counts["CTCF_binding_site"]
         + regulatory_counts["enhancer"]
         + regulatory_counts["silencer"]
+        + regulatory_counts["open_chromatin_region"]
+        + regulatory_counts["TF_binding_site"]
+        + regulatory_counts["curated"]
+        + regulatory_counts["flanking_region"]
         + regulatory_counts["transcriptional_cis_regulatory_region"]
         + regulatory_counts["promoter"]
         + regulatory_counts["DNase_I_hypersensitive_site"]
         + regulatory_counts["enhancer_blocking_element"]
         + regulatory_counts["TATA_box"]
+        + regulatory_counts["other"]
     )
 
     hi_genes = annot.get_haploinsufficient_gene_names(overlap_type=annotation.enums.OverlapType.all)
