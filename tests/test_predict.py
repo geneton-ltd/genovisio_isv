@@ -76,4 +76,5 @@ def test_predict():
             "regulatory_enhancer_blocking_element": -1.0,
             "regulatory_TATA_box": -1.0,
         },
+        isv_features=annot_values,
     )

@@ -62,6 +62,7 @@ class Prediction:
     isv_classification: ACMGClassification
     isv_shap_values: dict[str, float]
     isv_shap_scores: dict[str, float]
+    isv_features: isv_attributes.ISVAnnotValues
 
     def store_as_json(self, path: str) -> None:
         path = os.path.abspath(path)
@@ -119,4 +120,5 @@ def predict(annotated_cnv: isv_attributes.ISVAnnotValues, cnv_type: annotation.e
         isv_classification=predictions_df["isv2_classification"].iloc[0],
         isv_shap_values=shap_values,
         isv_shap_scores=get_shap_scores(shap_values),
+        isv_features=annotated_cnv,
     )
