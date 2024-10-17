@@ -34,3 +34,13 @@ repos:
     rev: "v2.2.6"
     hooks:
       - id: codespell
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        stages: [commit]
+        language: system
+        entry: pytest tests -s -v .
+        types: [python]
+        pass_filenames: false
+        always_run: true

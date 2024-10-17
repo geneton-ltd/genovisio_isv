@@ -18,7 +18,7 @@ annotation = {git = "https://github.com/geneton-ltd/genovisio_annotation.git#0.1
 pytest = "^6.0.0"
 
 [tool.poetry.scripts]
-isv-predict = "isv.predict:main"
+isv-predict = "isv.main:main"
 
 [build-system]
 requires = ["poetry-core"]
