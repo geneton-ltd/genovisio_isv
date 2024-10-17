@@ -24,20 +24,15 @@ class ACMGClassification(enum.StrEnum):
 def get_shap_values(loaded_model: Any, input_df: pd.DataFrame) -> dict[str, float]:
     explainer_cnvs = shap.Explainer(loaded_model)
     shap_values = explainer_cnvs(input_df).values[0]
-
     return {attr: float(shap_val) for shap_val, attr in zip(shap_values, loaded_model.feature_names)}
 
 
 def get_shap_scores(shap_values: dict[str, float]) -> dict[str, float]:
-    shap_scores: dict[str, float] = {}
-    for attribute in shap_values.keys():
-        shap_scores[attribute] = shap_values[attribute] * 2 - 1
-    return shap_scores
+    return {attribute: shap_value * 2 - 1 for attribute, shap_value in shap_values.items()}
 
 
 def get_isv_score(prediction: float) -> float:
-    isv_score = (prediction * 2) - 1
-    return isv_score
+    return (prediction * 2) - 1
 
 
 def get_acmg_classification(isv_score: float) -> ACMGClassification:
@@ -64,8 +59,7 @@ class Prediction:
 
 
 def format_model_path(cnvtype: annotation.enums.CNVType) -> str:
-    models_name = f"isv2_{cnvtype}.json"
-    return os.path.join(core.MODELS_DIR, models_name)
+    return os.path.join(core.MODELS_DIR, f"isv2_{cnvtype}.json")
 
 
 def get_attributes(cnvtype: annotation.enums.CNVType) -> list[str]:
