@@ -94,15 +94,16 @@ def predict(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVT
     input_df = prepare_dataframe(annotated_cnv, cnv_type)
 
     dmat_cnvs = xgb.DMatrix(input_df)
-    predicted_probability = loaded_model.predict(dmat_cnvs)[0]
+    predicted_probability = float(loaded_model.predict(dmat_cnvs)[0])
     print(f"{predicted_probability=}", file=sys.stderr)
+    isv_score = get_isv_score(predicted_probability)
 
     shap_values = get_shap_values(loaded_model, input_df)
 
     return Prediction(
         isv_prediction=predicted_probability,
-        isv_score=get_isv_score(predicted_probability),
-        isv_classification=get_acmg_classification(predicted_probability),
+        isv_score=isv_score,
+        isv_classification=get_acmg_classification(isv_score),
         isv_shap_values=shap_values,
         isv_shap_scores=get_shap_scores(shap_values),
         isv_features=annotated_cnv,
