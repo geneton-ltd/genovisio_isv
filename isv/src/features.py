@@ -4,7 +4,7 @@ import annotation
 
 
 @dataclass
-class ISVAnnotValues:
+class ISVFeatures:
     gencode_genes: int
     protein_coding: int
     pseudogenes: int
@@ -30,7 +30,7 @@ class ISVAnnotValues:
         return asdict(self)
 
 
-def get_annotation_attributes(annot: annotation.Annotation) -> ISVAnnotValues:
+def get(annot: annotation.Annotation) -> ISVFeatures:
     gene_type_counts = annot.count_gene_types()
     all_genes = (
         gene_type_counts["protein_coding"]
@@ -65,7 +65,7 @@ def get_annotation_attributes(annot: annotation.Annotation) -> ISVAnnotValues:
 
     annotated_genes = annot.get_annotated_genes()
 
-    return ISVAnnotValues(
+    return ISVFeatures(
         gencode_genes=all_genes,
         protein_coding=gene_type_counts["protein_coding"],
         pseudogenes=gene_type_counts["pseudogenes"],

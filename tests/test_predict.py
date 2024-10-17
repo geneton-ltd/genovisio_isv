@@ -1,10 +1,10 @@
 import annotation
 
-from isv.src import isv_attributes, prediction
+from isv.src import features, prediction
 
 
 def test_predict():
-    annot_values = isv_attributes.ISVAnnotValues(
+    annot_values = features.ISVFeatures(
         gencode_genes=80,
         protein_coding=39,
         pseudogenes=3,
@@ -31,7 +31,7 @@ def test_predict():
     assert result == prediction.Prediction(
         isv_prediction=0.994540274143219,
         isv_score=0.989080548286438,
-        isv_classification="Likely Pathogenic",
+        isv_classification=prediction.ACMGClassification.LIKELY_PATHOGENIC,
         isv_shap_values={
             "gencode_genes": 0.5013508200645447,
             "protein_coding": 0.5173912644386292,
