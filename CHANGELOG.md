@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.1](https://github.com/geneton-ltd/genovisio_isv/compare/v0.1.0...v0.1.1) (2024-10-17)
+
+
+### Performance Improvements
+
+* simplified prediction output ([6cd4506](https://github.com/geneton-ltd/genovisio_isv/commit/6cd4506332855f8509599aab03294029acbe6186))
+
+
+### Documentation
+
+* expanded development section ([14a923e](https://github.com/geneton-ltd/genovisio_isv/commit/14a923e698bfd56d4540684782d265abeb13d742))
+
 ## 0.1.0 (2024-10-16)
 
 
