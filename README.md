@@ -3,7 +3,7 @@
 [![Python version](https://img.shields.io/badge/python-3.12+-green.svg)](https://www.python.org/downloads/)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
 
-CNV annotation and pathogenicity prediction tool.
+CNV pathogenicity prediction tool.
 
 ## Installation
 
@@ -25,7 +25,7 @@ This gives you the following entrypoint:
 
 ## Running
 
-First, you need annotated CNV region, for example `annotation.json`. Then to predict, run:
+First, you need annotated CNV region, for example `annotation.json`. To get this annotation, see [Annotation package](https://github.com/geneton-ltd/genovisio_annotation). Then to predict, run:
 
 ```shell
 isv-predict annotation.json --output isv.json 2> log.err
@@ -49,7 +49,7 @@ pipx install poetry
 Now in the cloned repository, install the package:
 
 ```sh
-poetry install
+poetry install --with dev
 ```
 
 Activate the virtual environment where dependencies are installed:
@@ -58,11 +58,7 @@ Activate the virtual environment where dependencies are installed:
 poetry shell
 ```
 
-All dependencies are now installed and you can run entrypoint command `genovisio-report {ARGS}` or by using python:
-
-```sh
-python genovisio_report/main.py {ARGS}
-```
+All dependencies are now installed and you can run entrypoint command directly or using python `{script}`.
 
 ### Development without python 3.12
 
@@ -77,14 +73,10 @@ curl -sSL https://install.python-poetry.org | python3 -
 Now in the cloned repository, install the package:
 
 ```sh
-poetry install
+poetry install --with dev
 ```
 
-All dependencies are now installed and you can run entrypoint command `genovisio-report {ARGS}` or by using python:
-
-```sh
-python genovisio_report/main.py {ARGS}
-```
+All dependencies are now installed and you can run entrypoint command directly or using `python {script}`.
 
 ### Adding/removing dependencies
 
