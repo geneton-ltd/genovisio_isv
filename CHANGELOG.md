@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.2](https://github.com/geneton-ltd/genovisio_isv/compare/v0.1.1...v0.1.2) (2024-10-20)
+
+
+### Performance Improvements
+
+* bumped annotation package ([723c466](https://github.com/geneton-ltd/genovisio_isv/commit/723c466350c965192d821816a6c9881e8f59f292))
+
+
+### Documentation
+
+* updated README ([da6a614](https://github.com/geneton-ltd/genovisio_isv/commit/da6a614926aca352cc1e20ef63617043c15badce))
+
 ## [0.1.1](https://github.com/geneton-ltd/genovisio_isv/compare/v0.1.0...v0.1.1) (2024-10-17)
 
 
