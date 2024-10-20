@@ -2,7 +2,7 @@
 
 [[package]]
 name = "annotation"
-version = "0.1.0"
+version = "0.2.0"
 description = "CNV annotation tool"
 optional = false
 python-versions = ">=3.12"
@@ -15,9 +15,9 @@ pymongo = "==4.8"
 
 [package.source]
 type = "git"
-url = "https://github.com/geneton-ltd/genovisio_annotation.git#0.1.0"
+url = "https://github.com/geneton-ltd/genovisio_annotation.git#0.2.0"
 reference = "HEAD"
-resolved_reference = "aeb58254fdd389a3991bdc291d02926f964e76a4"
+resolved_reference = "f1a056d9c6cb06db9e97cb74859858ea4a2f672a"
 
 [[package]]
 name = "atomicwrites"
@@ -728,4 +728,4 @@ scikit-learn = ["scikit-learn"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12"
-content-hash = "442b3cf377e3e37a40b7afa4fc6e938b67e0b997799a83e2a088fc2d38f52bca"
+content-hash = "ec975801088cb865f03151e5100c4f191f239b02a299fcd369c9cffaf02c3437"

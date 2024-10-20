@@ -59,9 +59,9 @@ def get(annot: annotation.Annotation) -> ISVFeatures:
         + regulatory_counts["other"]
     )
 
-    hi_genes = annot.get_haploinsufficient_gene_names(overlap_type=annotation.enums.OverlapType.all)
-    hi_regions = annot.get_haploinsufficient_regions(overlap_type=annotation.enums.OverlapType.all)
-    ts_regions = annot.get_triplosensitivity_regions(overlap_type=annotation.enums.OverlapType.all)
+    hi_genes = annot.get_haploinsufficient_gene_names(overlap_type=annotation.enums.Overlap.ANY, valid_scores=[1, 2, 3])
+    hi_regions = annot.get_haploinsufficient_regions(overlap_type=annotation.enums.Overlap.ANY, valid_scores=[1, 2, 3])
+    ts_regions = annot.get_triplosensitivity_regions(overlap_type=annotation.enums.Overlap.ANY, valid_scores=[1, 2, 3])
 
     annotated_genes = annot.get_annotated_genes()
 
