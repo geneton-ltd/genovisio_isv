@@ -94,6 +94,9 @@ def predict(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVT
     print(f"Loading model from {model_path=}", file=sys.stderr)
     loaded_model = joblib.load(model_path)
 
+    features = loaded_model.feature_names
+    print("Features used in the model:", features)
+
     print("Model loaded")
     input_df = prepare_dataframe(annotated_cnv, cnv_type)
 
