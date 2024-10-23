@@ -1,4 +1,6 @@
 import annotation
+import sys
+
 
 from isv.src import features, prediction
 
@@ -28,6 +30,11 @@ def test_predict():
     )
 
     result = prediction.predict(annot_values, annotation.enums.CNVType.GAIN)
+
+    print(result)
+    print()
+    print('SHAP VALUES', type(result.isv_shap_values))
+    print(result.isv_shap_values)
     assert result == prediction.Prediction(
         isv_prediction=0.994540274143219,
         isv_score=0.989080548286438,
@@ -78,3 +85,59 @@ def test_predict():
         },
         isv_features=annot_values,
     )
+
+def test_shap_values():
+    annotated_values = features.ISVFeatures(
+        gencode_genes= 82,
+        protein_coding = 25,
+        pseudogenes = 6,
+        # mirna = 0,
+        # lncrna = 0,
+        # rrna = 0,
+        # snrna = 0,
+        morbid_genes = 8,
+        disease_associated_genes = 9,
+        hi_genes = 6,
+        regions_HI = 0,
+        # regions_TS = 0,
+        regulatory = 996,
+        regulatory_enhancer = 350,
+        # regulatory_silencer = 0,
+        # regulatory_transcriptional_cis_regulatory_region = 0,
+        regulatory_promoter = 87,
+        # regulatory_DNase_I_hypersensitive_site = 0,
+        # regulatory_enhancer_blocking_element = 0,
+        # regulatory_TATA_box = 0,
+    )
+    
+    print('Test start get prediction')
+
+    input_df = prediction.prepare_dataframe(annotated_values, annotation.enums.CNVType.LOSS)
+    print('1: input_df: ', input_df)
+    attributes = prediction.get_attributes(annotation.enums.CNVType.LOSS)
+    print('attributes TESTING: ', attributes)
+    
+    result = prediction.predict(annotated_values, annotation.enums.CNVType.LOSS)
+
+    print(f"isv_prediction TESTING: {result.isv_prediction}")
+     
+    print(type(result.isv_shap_values), result.isv_shap_values)
+
+    should_looklike = {
+    # assert result.isv_shap_values == { 
+        'gencode_genes': 0.0008409113622041597,
+        'protein_coding': 0.052774671253003176,
+        'pseudogenes': 0.006658078575225596,
+        'morbid_genes': 0.0849558169969855,
+        'disease_associated_genes': 0.06765402430586857,
+        'hi_genes': 0.14129687865283544,
+        'regions_HI': -0.0041101426453116026,
+        'regulatory': 0.2574696237720319,
+        'regulatory_enhancer': 0.20771103267844182,
+        'regulatory_promoter': 0.0035991744173617017
+        }   
+    print()
+    print(type(should_looklike), should_looklike)
+
+test_shap_values()
+# test_predict()

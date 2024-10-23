@@ -11,6 +11,7 @@ import shap
 import xgboost as xgb
 
 from isv.src import constants, core, features
+from sklearn.preprocessing import RobustScaler
 
 
 class ACMGClassification(enum.StrEnum):
@@ -21,9 +22,15 @@ class ACMGClassification(enum.StrEnum):
     BENIGN = "Benign"
 
 
-def get_shap_values(loaded_model: Any, input_df: pd.DataFrame) -> dict[str, float]:
-    explainer_cnvs = shap.Explainer(loaded_model)
-    shap_values = explainer_cnvs(input_df).values[0]
+def get_shap_values(loaded_model: Any, input_df: pd.DataFrame, cnv_type: str) -> dict[str, float]:
+    path_to_train_set = os.path.join(core.MODELS_DIR, f"train_{cnv_type}.tsv.gz")
+    X_train = pd.DataFrame(path_to_train_set, sep='\t', compression='gzip')
+    scaler = RobustScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_any = scaler.transform(input_df)
+
+    explainer_cnvs = shap.TreeExplainer(loaded_model, X_train, model_output='probability')
+    shap_values = explainer_cnvs(X_any).values[0]
     return {attr: float(shap_val) for shap_val, attr in zip(shap_values, loaded_model.feature_names)}
 
 
@@ -74,6 +81,8 @@ def get_attributes(cnvtype: annotation.enums.CNVType) -> list[str]:
 def prepare_dataframe(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVType) -> pd.DataFrame:
     attributes = get_attributes(cnv_type)
 
+    print(f"Attributes: {attributes}")
+
     cnv_dct = annotated_cnv.as_dict_of_attributes()
     annotated_cnv_floats = {col: float(cnv_dct[col]) for col in cnv_dct if col in attributes}
     df = pd.DataFrame.from_dict(annotated_cnv_floats, orient="index").T
@@ -85,20 +94,27 @@ def predict(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVT
     print(f"Loading model from {model_path=}", file=sys.stderr)
     loaded_model = joblib.load(model_path)
 
+    print("Model loaded")
     input_df = prepare_dataframe(annotated_cnv, cnv_type)
+
+    print('2: input_df:', input_df)
+
+    print(f'3: input_df:{input_df.to_string()}', file=sys.stderr)
 
     dmat_cnvs = xgb.DMatrix(input_df)
     predicted_probability = float(loaded_model.predict(dmat_cnvs)[0])
-    print(f"{predicted_probability=}", file=sys.stderr)
+    print(f"{predicted_probability=}", file=sys.stderr, flush=True)
     isv_score = get_isv_score(predicted_probability)
 
-    shap_values = get_shap_values(loaded_model, input_df)
+    print(f"isv_score  PREDICT: {isv_score=}", file=sys.stderr, flush=True)
+
+    shap_values = get_shap_values(loaded_model, input_df, cnv_type)
 
     return Prediction(
         isv_prediction=predicted_probability,
         isv_score=isv_score,
         isv_classification=get_acmg_classification(isv_score),
         isv_shap_values=shap_values,
-        isv_shap_scores=get_shap_scores(shap_values),
+        isv_shap_scores=shap_values, # get_shap_scores(shap_values),
         isv_features=annotated_cnv,
     )
