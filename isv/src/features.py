@@ -10,23 +10,23 @@ class ISVFeatures:
     gencode_genes: int
     protein_coding: int
     pseudogenes: int
-    # mirna: int
-    # lncrna: int
-    # rrna: int
-    # snrna: int
+    mirna: int
+    lncrna: int
+    rrna: int
+    snrna: int
     morbid_genes: int
     disease_associated_genes: int
     hi_genes: int
     regions_HI: int
-    # regions_TS: int
+    regions_TS: int
     regulatory: int
     regulatory_enhancer: int
-    # regulatory_silencer: int
-    # regulatory_transcriptional_cis_regulatory_region: int
+    regulatory_silencer: int
+    regulatory_transcriptional_cis_regulatory_region: int
     regulatory_promoter: int
-    # regulatory_DNase_I_hypersensitive_site: int
-    # regulatory_enhancer_blocking_element: int
-    # regulatory_TATA_box: int
+    regulatory_DNase_I_hypersensitive_site: int
+    regulatory_enhancer_blocking_element: int
+    regulatory_TATA_box: int
 
     def as_dict_of_attributes(self) -> dict[str, int]:
         return asdict(self)

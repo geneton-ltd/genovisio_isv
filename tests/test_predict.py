@@ -88,56 +88,54 @@ def test_predict():
 
 def test_shap_values():
     annotated_values = features.ISVFeatures(
-        gencode_genes= 82,
-        protein_coding = 25,
-        pseudogenes = 6,
+        gencode_genes = 1,
+        protein_coding = 1,
+        pseudogenes = 0,
         mirna = 0,
         lncrna = 0,
         rrna = 0,
         snrna = 0,
-        morbid_genes = 8,
-        disease_associated_genes = 9,
-        hi_genes = 6,
+        morbid_genes = 1,
+        disease_associated_genes = 1,
+        hi_genes = 0,
         regions_HI = 0,
         regions_TS = 0,
-        regulatory = 996,
-        regulatory_enhancer = 350,
+        regulatory = 1,
+        regulatory_enhancer = 0,
         regulatory_silencer = 0,
         regulatory_transcriptional_cis_regulatory_region = 0,
-        regulatory_promoter = 87,
+        regulatory_promoter = 0,
         regulatory_DNase_I_hypersensitive_site = 0,
         regulatory_enhancer_blocking_element = 0,
         regulatory_TATA_box = 0,
     )
     
-    print('Test start get prediction')
-
-    input_df = prediction.prepare_dataframe(annotated_values, annotation.enums.CNVType.LOSS)
-    print('1: input_df: ', input_df)
-    attributes = prediction.get_attributes(annotation.enums.CNVType.LOSS)
-    print('attributes TESTING: ', attributes)
-    
     result = prediction.predict(annotated_values, annotation.enums.CNVType.LOSS)
 
-    print(f"isv_prediction TESTING: {result.isv_prediction}")
-     
-    print(type(result.isv_shap_values), result.isv_shap_values)
-
     should_looklike = {
-    # assert result.isv_shap_values == { 
-        'gencode_genes': 0.0008409113622041597,
-        'protein_coding': 0.052774671253003176,
-        'pseudogenes': 0.006658078575225596,
-        'morbid_genes': 0.0849558169969855,
-        'disease_associated_genes': 0.06765402430586857,
-        'hi_genes': 0.14129687865283544,
-        'regions_HI': -0.0041101426453116026,
-        'regulatory': 0.2574696237720319,
-        'regulatory_enhancer': 0.20771103267844182,
-        'regulatory_promoter': 0.0035991744173617017
-        }   
-    print()
-    print(type(should_looklike), should_looklike)
+        'gencode_genes': -0.001927492717935655,
+        'protein_coding': -0.020810622836816832,
+        'pseudogenes': -0.014682043028594239,
+        'mirna': -0.0007550389840000536,
+        'lncrna': 0.002913866574548539,
+        'rrna': 0.0,
+        'snrna': -0.007335019845483958,
+        'morbid_genes': 0.013905657070214352,
+        'disease_associated_genes': 0.02139180318485674,
+        'hi_genes': -0.07510238397080769,
+        'regions_HI': -0.002166717122879159,
+        'regions_TS': -0.019773419437143613,
+        'regulatory': -0.015584879749943232,
+        'regulatory_enhancer': 0.012059786718962509,
+        'regulatory_silencer': 0.0,
+        'regulatory_transcriptional_cis_regulatory_region': 0.0,
+        'regulatory_promoter': 0.02675586934182097,
+        'regulatory_DNase_I_hypersensitive_site': 0.0,
+        'regulatory_enhancer_blocking_element': 0.0,
+        'regulatory_TATA_box': 0.0
+        }
+
+    assert result.isv_shap_values == should_looklike
 
 test_shap_values()
 # test_predict()

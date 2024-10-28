@@ -23,8 +23,11 @@ class ACMGClassification(enum.StrEnum):
 
 
 def get_shap_values(loaded_model: Any, input_df: pd.DataFrame, cnv_type: str) -> dict[str, float]:
-    path_to_train_set = os.path.join(core.MODELS_DIR, f"train_{cnv_type}.tsv.gz")
-    X_train = pd.DataFrame(path_to_train_set, sep='\t', compression='gzip')
+    path_to_train_set = os.path.join(core.MODELS_DIR, f"X_train_clinvar_{cnv_type}.tsv.gz")
+    X_train = pd.read_csv(path_to_train_set, sep='\t', compression='gzip')
+
+    attributes = get_attributes(cnv_type)
+    X_train = X_train[attributes]
     scaler = RobustScaler()
     X_train = scaler.fit_transform(X_train)
     X_any = scaler.transform(input_df)
