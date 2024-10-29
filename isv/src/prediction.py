@@ -121,6 +121,6 @@ def predict(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVT
         isv_score=isv_score,
         isv_classification=get_acmg_classification(isv_score),
         isv_shap_values=shap_values,
-        isv_shap_scores=shap_values, # get_shap_scores(shap_values),
+        isv_shap_scores=shap_values,
         isv_features=annotated_cnv,
     )
