@@ -84,8 +84,6 @@ def get_attributes(cnvtype: annotation.enums.CNVType) -> list[str]:
 def prepare_dataframe(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVType) -> pd.DataFrame:
     attributes = get_attributes(cnv_type)
 
-    print(f"Attributes: {attributes}")
-
     cnv_dct = annotated_cnv.as_dict_of_attributes()
     annotated_cnv_floats = {col: float(cnv_dct[col]) for col in cnv_dct if col in attributes}
     df = pd.DataFrame.from_dict(annotated_cnv_floats, orient="index").T
@@ -100,19 +98,11 @@ def predict(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVT
     features = loaded_model.feature_names
     print("Features used in the model:", features)
 
-    print("Model loaded")
     input_df = prepare_dataframe(annotated_cnv, cnv_type)
-
-    print('2: input_df:', input_df)
-
-    print(f'3: input_df:{input_df.to_string()}', file=sys.stderr)
 
     dmat_cnvs = xgb.DMatrix(input_df)
     predicted_probability = float(loaded_model.predict(dmat_cnvs)[0])
-    print(f"{predicted_probability=}", file=sys.stderr, flush=True)
     isv_score = get_isv_score(predicted_probability)
-
-    print(f"isv_score  PREDICT: {isv_score=}", file=sys.stderr, flush=True)
 
     shap_values = get_shap_values(loaded_model, input_df, cnv_type)
 

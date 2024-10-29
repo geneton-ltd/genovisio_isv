@@ -31,8 +31,6 @@ def test_predict():
 
     result = prediction.predict(annot_values, annotation.enums.CNVType.GAIN)
 
-    print(result)
-    print()
     print('SHAP VALUES', type(result.isv_shap_values))
     print(result.isv_shap_values)
     assert result == prediction.Prediction(
