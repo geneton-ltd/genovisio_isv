@@ -9,9 +9,9 @@ import joblib
 import pandas as pd
 import shap
 import xgboost as xgb
+from sklearn.preprocessing import RobustScaler
 
 from isv.src import constants, core, features
-from sklearn.preprocessing import RobustScaler
 
 
 class ACMGClassification(enum.StrEnum):
@@ -24,7 +24,7 @@ class ACMGClassification(enum.StrEnum):
 
 def get_shap_values(loaded_model: Any, input_df: pd.DataFrame, cnv_type: str) -> dict[str, float]:
     path_to_train_set = os.path.join(core.MODELS_DIR, f"X_train_clinvar_{cnv_type}.tsv.gz")
-    X_train = pd.read_csv(path_to_train_set, sep='\t', compression='gzip')
+    X_train = pd.read_csv(path_to_train_set, sep="\t", compression="gzip")
 
     attributes = get_attributes(cnv_type)
     X_train = X_train[attributes]
@@ -32,7 +32,7 @@ def get_shap_values(loaded_model: Any, input_df: pd.DataFrame, cnv_type: str) ->
     X_train = scaler.fit_transform(X_train)
     X_any = scaler.transform(input_df)
 
-    explainer_cnvs = shap.TreeExplainer(loaded_model, X_train, model_output='probability')
+    explainer_cnvs = shap.TreeExplainer(loaded_model, X_train, model_output="probability")
     shap_values = explainer_cnvs(X_any).values[0]
     return {attr: float(shap_val) for shap_val, attr in zip(shap_values, loaded_model.feature_names)}
 
@@ -96,7 +96,7 @@ def predict(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVT
     loaded_model = joblib.load(model_path)
 
     features = loaded_model.feature_names
-    print("Features used in the model:", features)
+    print(f"Features used in the model: {features}", file=sys.stderr)
 
     input_df = prepare_dataframe(annotated_cnv, cnv_type)
 
