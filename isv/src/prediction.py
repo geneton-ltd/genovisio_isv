@@ -7,9 +7,7 @@ from typing import Any
 import annotation
 import joblib
 import pandas as pd
-import shap
 import xgboost as xgb
-from sklearn.preprocessing import RobustScaler
 
 from isv.src import constants, core, features
 
@@ -23,17 +21,19 @@ class ACMGClassification(enum.StrEnum):
 
 
 def get_shap_values(loaded_model: Any, input_df: pd.DataFrame, cnv_type: str) -> dict[str, float]:
-    path_to_train_set = os.path.join(core.MODELS_DIR, f"X_train_clinvar_{cnv_type}.tsv.gz")
-    X_train = pd.read_csv(path_to_train_set, sep="\t", compression="gzip")
+    scaler_path = os.path.join(core.MODELS_DIR, f"scaler_{cnv_type}.joblib")
+    explainer_path = os.path.join(core.MODELS_DIR, f"shap_tree_explainer_{cnv_type}.joblib")
 
-    attributes = get_attributes(cnv_type)
-    X_train = X_train[attributes]
-    scaler = RobustScaler()
-    X_train = scaler.fit_transform(X_train)
+    # load scaler and sclade the dataframe
+    scaler = joblib.load(scaler_path)
     X_any = scaler.transform(input_df)
 
-    explainer_cnvs = shap.TreeExplainer(loaded_model, X_train, model_output="probability")
+    # load the explainer
+    explainer_cnvs = joblib.load(explainer_path)
+
+    # get shap values
     shap_values = explainer_cnvs(X_any).values[0]
+
     return {attr: float(shap_val) for shap_val, attr in zip(shap_values, loaded_model.feature_names)}
 
 
