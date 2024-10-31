@@ -29,8 +29,6 @@ def test_predict():
 
     result = prediction.predict(annot_values, annotation.enums.CNVType.GAIN)
 
-    print("SHAP VALUES", type(result.isv_shap_values))
-    print(result.isv_shap_values)
     assert result == prediction.Prediction(
         isv_prediction=0.9919388890266418,
         isv_score=0.9838777780532837,
