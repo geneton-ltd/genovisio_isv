@@ -37,10 +37,6 @@ def get_shap_values(loaded_model: Any, input_df: pd.DataFrame, cnv_type: str) ->
     return {attr: float(shap_val) for shap_val, attr in zip(shap_values, loaded_model.feature_names)}
 
 
-def get_shap_scores(shap_values: dict[str, float]) -> dict[str, float]:
-    return {attribute: shap_value * 2 - 1 for attribute, shap_value in shap_values.items()}
-
-
 def get_isv_score(prediction: float) -> float:
     return (prediction * 2) - 1
 
@@ -64,7 +60,6 @@ class Prediction:
     isv_score: float
     isv_classification: ACMGClassification
     isv_shap_values: dict[str, float]
-    isv_shap_scores: dict[str, float]
     isv_features: features.ISVFeatures
 
 
@@ -111,6 +106,5 @@ def predict(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVT
         isv_score=isv_score,
         isv_classification=get_acmg_classification(isv_score),
         isv_shap_values=shap_values,
-        isv_shap_scores=shap_values,
         isv_features=annotated_cnv,
     )
