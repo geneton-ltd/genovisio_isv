@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/geneton-ltd/genovisio_isv/compare/v0.1.2...v0.2.0) (2024-10-31)
+
+
+### Features
+
+* used robust scaler for model and tree explainer for shaps ([e9980d2](https://github.com/geneton-ltd/genovisio_isv/commit/e9980d291c26c5f023c4eaede04c4aa7ed3c2ac2))
+
 ## [0.1.2](https://github.com/geneton-ltd/genovisio_isv/compare/v0.1.1...v0.1.2) (2024-10-20)
 
 
