@@ -15,7 +15,8 @@ shap = "==0.45.1"
 annotation = {git = "https://github.com/geneton-ltd/genovisio_annotation.git#0.2.0"}
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^6.0.0"
+pytest = ">=8.2.0"
+pre-commit = ">=4.0.1"
 
 [tool.poetry.scripts]
 isv-predict = "isv.main:main"
