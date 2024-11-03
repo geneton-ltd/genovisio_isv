@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/geneton-ltd/genovisio_isv/compare/v0.2.0...v0.3.0) (2024-11-03)
+
+
+### Features
+
+* Add new model ([39bb4fb](https://github.com/geneton-ltd/genovisio_isv/commit/39bb4fb3ad610be842f1599ed3895229a7c8b029))
+
 ## [0.2.0](https://github.com/geneton-ltd/genovisio_isv/compare/v0.1.2...v0.2.0) (2024-10-31)
 
 
