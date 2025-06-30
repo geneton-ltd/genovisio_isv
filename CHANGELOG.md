@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1](https://github.com/geneton-ltd/genovisio_isv/compare/v0.3.0...v0.3.1) (2025-06-30)
+
+
+### Bug Fixes
+
+* deployment fixed to use release version ([20a6fef](https://github.com/geneton-ltd/genovisio_isv/commit/20a6feff21922e184034a3276ae0265ac1cfc98d))
+* deployment fixed to use release version ([1ef29e0](https://github.com/geneton-ltd/genovisio_isv/commit/1ef29e0a9e473c614f40f2c952b331172436c2d1))
+
 ## [0.3.0](https://github.com/geneton-ltd/genovisio_isv/compare/v0.2.0...v0.3.0) (2024-11-03)
 
 
