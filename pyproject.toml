@@ -12,7 +12,7 @@ numpy = "==1.26.4"
 joblib = ">=1.4"
 xgboost = "==2.1.0"
 shap = "==0.45.1"
-annotation = {git = "https://github.com/geneton-ltd/genovisio_annotation.git#0.2.0"}
+annotation = {git = "https://github.com/geneton-ltd/genovisio_annotation.git", tag= "v0.2.0"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.2.0"
