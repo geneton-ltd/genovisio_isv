@@ -7,7 +7,6 @@ from typing import Any
 import annotation
 import joblib
 import pandas as pd
-import shap
 import xgboost as xgb
 
 from isv.src import constants, core, features
@@ -22,9 +21,9 @@ class ACMGClassification(enum.StrEnum):
 
 
 def get_shap_values(loaded_model: Any, input_df: pd.DataFrame, cnv_type: str) -> dict[str, float]:
-    model_explainer = shap.TreeExplainer(loaded_model)
-    shap_values = model_explainer.shap_values(input_df)[0]
-
+    explainer_path = os.path.join(core.MODELS_DIR, f"shap_tree_explainer_{cnv_type}.joblib")
+    explainer_cnvs = joblib.load(explainer_path)
+    shap_values = explainer_cnvs(input_df).values[0]
     return {attr: float(shap_val) for shap_val, attr in zip(shap_values, loaded_model.feature_names)}
 
 
