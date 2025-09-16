@@ -1,11 +1,11 @@
 import enum
 import os
+import pickle
 import sys
 from dataclasses import dataclass
 from typing import Any
 
 import annotation
-import joblib
 import pandas as pd
 import xgboost as xgb
 
@@ -20,21 +20,20 @@ class ACMGClassification(enum.StrEnum):
     BENIGN = "Benign"
 
 
-def get_shap_values(loaded_model: Any, input_df: pd.DataFrame, cnv_type: str) -> dict[str, float]:
-    scaler_path = os.path.join(core.MODELS_DIR, f"scaler_{cnv_type}.joblib")
-    explainer_path = os.path.join(core.MODELS_DIR, f"shap_tree_explainer_{cnv_type}.joblib")
+def get_shap_values(
+    loaded_model: Any, input_df: pd.DataFrame, cnv_type: annotation.enums.CNVType
+) -> tuple[dict[str, float], float]:
+    explainer_path = os.path.join(core.MODELS_DIR, f"shap_{cnv_type}.pkl")
 
-    # load scaler and sclade the dataframe
-    scaler = joblib.load(scaler_path)
-    X_any = scaler.transform(input_df)
+    with open(explainer_path, "rb") as f:
+        explainer_cnvs = pickle.load(f)
 
-    # load the explainer
-    explainer_cnvs = joblib.load(explainer_path)
+    explanation = explainer_cnvs(input_df)
+    shap_values = explanation.values[0]
+    base_value = explanation.base_values[0]
 
-    # get shap values
-    shap_values = explainer_cnvs(X_any).values[0]
-
-    return {attr: float(shap_val) for shap_val, attr in zip(shap_values, loaded_model.feature_names)}
+    features = get_attributes(cnv_type)
+    return {attr: float(shap_val) for shap_val, attr in zip(shap_values, features)}, base_value
 
 
 def get_isv_score(prediction: float) -> float:
@@ -61,10 +60,11 @@ class Prediction:
     isv_classification: ACMGClassification
     isv_shap_values: dict[str, float]
     isv_features: features.ISVFeatures
+    explainer_base_value: float
 
 
 def format_model_path(cnvtype: annotation.enums.CNVType) -> str:
-    return os.path.join(core.MODELS_DIR, f"isv2_{cnvtype}.json")
+    return os.path.join(core.MODELS_DIR, f"{cnvtype}.json")
 
 
 def get_attributes(cnvtype: annotation.enums.CNVType) -> list[str]:
@@ -88,9 +88,12 @@ def prepare_dataframe(annotated_cnv: features.ISVFeatures, cnv_type: annotation.
 def predict(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVType) -> Prediction:
     model_path = format_model_path(cnv_type)
     print(f"Loading model from {model_path=}", file=sys.stderr)
-    loaded_model = joblib.load(model_path)
 
-    features = loaded_model.feature_names
+    loaded_model = xgb.Booster()
+    loaded_model.load_model(model_path)
+
+    # features = loaded_model.feature_names
+    features = get_attributes(cnv_type)
     print(f"Features used in the model: {features}", file=sys.stderr)
 
     input_df = prepare_dataframe(annotated_cnv, cnv_type)
@@ -99,7 +102,7 @@ def predict(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVT
     predicted_probability = float(loaded_model.predict(dmat_cnvs)[0])
     isv_score = get_isv_score(predicted_probability)
 
-    shap_values = get_shap_values(loaded_model, input_df, cnv_type)
+    shap_values, base_value = get_shap_values(loaded_model, input_df, cnv_type)
 
     return Prediction(
         isv_prediction=predicted_probability,
@@ -107,4 +110,5 @@ def predict(annotated_cnv: features.ISVFeatures, cnv_type: annotation.enums.CNVT
         isv_classification=get_acmg_classification(isv_score),
         isv_shap_values=shap_values,
         isv_features=annotated_cnv,
+        explainer_base_value=base_value,
     )

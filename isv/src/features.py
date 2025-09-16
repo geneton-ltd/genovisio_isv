@@ -27,6 +27,11 @@ class ISVFeatures:
     regulatory_DNase_I_hypersensitive_site: int
     regulatory_enhancer_blocking_element: int
     regulatory_TATA_box: int
+    regulatory_open_chromatin_region: int
+    regulatory_flanking_region: int
+    regulatory_CTCF_binding_site: int
+    regulatory_TF_binding_site: int
+    regulatory_curated: int
 
     def as_dict_of_attributes(self) -> dict[str, int]:
         return asdict(self)
@@ -94,4 +99,9 @@ def get(annot: annotation.Annotation) -> ISVFeatures:
         regulatory_DNase_I_hypersensitive_site=regulatory_counts["DNase_I_hypersensitive_site"],
         regulatory_enhancer_blocking_element=regulatory_counts["enhancer_blocking_element"],
         regulatory_TATA_box=regulatory_counts["TATA_box"],
+        regulatory_open_chromatin_region=regulatory_counts["open_chromatin_region"],
+        regulatory_flanking_region=regulatory_counts["flanking_region"],
+        regulatory_CTCF_binding_site=regulatory_counts["CTCF_binding_site"],
+        regulatory_TF_binding_site=regulatory_counts["TF_binding_site"],
+        regulatory_curated=regulatory_counts["curated"],
     )
