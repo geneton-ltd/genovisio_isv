@@ -3,7 +3,7 @@
 [![Python version](https://img.shields.io/badge/python-3.12+-green.svg)](https://www.python.org/downloads/)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
 
-CNV pathogenicity prediction tool.
+CNV pathogenicity prediction tool. For training use [dedicated repo](https://github.com/geneton-ltd/genovisio_isv_training).
 
 ## Installation
 

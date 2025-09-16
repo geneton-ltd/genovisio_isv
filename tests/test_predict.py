@@ -1,6 +1,7 @@
 import annotation
+import scipy.special
 
-from isv.src import features, prediction
+from isv.src import constants, features, prediction
 
 
 def test_predict():
@@ -25,70 +26,65 @@ def test_predict():
         regulatory_DNase_I_hypersensitive_site=0,
         regulatory_enhancer_blocking_element=0,
         regulatory_TATA_box=0,
+        regulatory_open_chromatin_region=0,
+        regulatory_flanking_region=0,
+        regulatory_CTCF_binding_site=0,
+        regulatory_TF_binding_site=0,
+        regulatory_curated=0,
     )
 
-    result = prediction.predict(annot_values, annotation.enums.CNVType.GAIN)
+    result = prediction.predict(annot_values, annotation.enums.CNVType.LOSS)
+    total_shap = sum(result.isv_shap_values.values())
+    total_shap_odds = scipy.special.expit(result.explainer_base_value + total_shap)
+    assert abs(total_shap_odds - result.isv_prediction) < 1e-6
+    assert result.isv_prediction > 0.6
+    assert result.isv_score > 0.3
+    assert result.isv_classification == prediction.ACMGClassification.VOUS
 
-    assert result == prediction.Prediction(
-        isv_prediction=0.9915704727172852,
-        isv_score=0.9831409454345703,
-        isv_classification=prediction.ACMGClassification.LIKELY_PATHOGENIC,
-        isv_shap_values={
-            "gencode_genes": -0.0069333390283776485,
-            "pseudogenes": -0.0023958869803474654,
-            "mirna": 0.0004557597314434351,
-            "snrna": -0.0036613690787413726,
-            "morbid_genes": 0.02454142752716766,
-            "disease_associated_genes": 0.019304866009577246,
-            "hi_genes": -0.005989121384606385,
-            "regions_HI": -0.005114040226455132,
-            "regions_TS": -0.033045386377829125,
-            "regulatory": -0.0072940625459038755,
-            "regulatory_enhancer": -0.019394158791678426,
-        },
-        isv_features=annot_values,
-    )
+    for attr in constants.LOSS_ATTRIBUTES:
+        assert attr in result.isv_features.as_dict_of_attributes().keys()
+
+    assert constants.LOSS_ATTRIBUTES == list(result.isv_shap_values.keys())
 
 
 def test_shap_values():
     annotated_values = features.ISVFeatures(
-        gencode_genes=1,
-        protein_coding=1,
-        pseudogenes=0,
+        gencode_genes=300,
+        protein_coding=0,
+        pseudogenes=1000,
         mirna=0,
         lncrna=0,
         rrna=0,
         snrna=0,
-        morbid_genes=1,
-        disease_associated_genes=1,
-        hi_genes=0,
-        regions_HI=0,
-        regions_TS=0,
-        regulatory=1,
+        morbid_genes=100,
+        disease_associated_genes=100,
+        hi_genes=5,
+        regions_HI=5,
+        regions_TS=25,
+        regulatory=500,
         regulatory_enhancer=0,
-        regulatory_silencer=0,
+        regulatory_silencer=200,
         regulatory_transcriptional_cis_regulatory_region=0,
         regulatory_promoter=0,
         regulatory_DNase_I_hypersensitive_site=0,
         regulatory_enhancer_blocking_element=0,
         regulatory_TATA_box=0,
+        regulatory_open_chromatin_region=0,
+        regulatory_flanking_region=0,
+        regulatory_CTCF_binding_site=0,
+        regulatory_TF_binding_site=0,
+        regulatory_curated=0,
     )
 
-    result = prediction.predict(annotated_values, annotation.enums.CNVType.LOSS)
-    print(result.isv_shap_values)
+    result = prediction.predict(annotated_values, annotation.enums.CNVType.GAIN)
+    total_shap = sum(result.isv_shap_values.values())
+    total_shap_odds = scipy.special.expit(result.explainer_base_value + total_shap)
+    assert abs(total_shap_odds - result.isv_prediction) < 1e-6
+    assert result.isv_prediction > 0.75
+    assert result.isv_score > 0.5
+    assert result.isv_classification == prediction.ACMGClassification.VOUS
 
-    assert result.isv_shap_values == {
-        "gencode_genes": -0.010741195378547204,
-        "protein_coding": -0.02688071150344005,
-        "pseudogenes": -0.02470392766259786,
-        "mirna": -0.0017974743092537251,
-        "lncrna": 0.008163900879669991,
-        "morbid_genes": 0.021527917712255706,
-        "disease_associated_genes": 0.0342692272460824,
-        "hi_genes": -0.1071287399346984,
-        "regions_HI": 0.0019592892535194163,
-        "regions_TS": -0.015655114137433174,
-        "regulatory": -0.010401324343676138,
-        "regulatory_enhancer": 0.022800187439036702,
-        "regulatory_promoter": 0.029876231495716707,
-    }
+    for attr in constants.GAIN_ATTRIBUTES:
+        assert attr in result.isv_features.as_dict_of_attributes().keys()
+
+    assert constants.GAIN_ATTRIBUTES == list(result.isv_shap_values.keys())
