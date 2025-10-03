@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.1](https://github.com/geneton-ltd/genovisio_isv/compare/v0.5.0...v0.5.1) (2025-10-03)
+
+
+### Bug Fixes
+
+* fixed hs and ti scores ([fbed51d](https://github.com/geneton-ltd/genovisio_isv/commit/fbed51d3fa352a099ab79c381e03e75517bf5384))
+* fixed hs and ti scores ([23dae57](https://github.com/geneton-ltd/genovisio_isv/commit/23dae576f1e5ba6cec34ddb9842d07eaaaa815eb))
+
 ## [0.5.0](https://github.com/geneton-ltd/genovisio_isv/compare/v0.4.0...v0.5.0) (2025-10-01)
 
 
